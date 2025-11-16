@@ -6,10 +6,12 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { DB_CONNECTION } from './database/database.connection';
 import { DatabaseModule } from './database/database.module';
 import { PrismaClient } from 'generated/prisma/client';
+import { FoldersModule } from './folders/folders.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
     AuthModule.forRootAsync({
       imports: [DatabaseModule],
       useFactory: (db: PrismaClient) => ({
@@ -21,6 +23,7 @@ import { PrismaClient } from 'generated/prisma/client';
       }),
       inject: [DB_CONNECTION],
     }),
+    FoldersModule,
   ],
   controllers: [],
   providers: [],
