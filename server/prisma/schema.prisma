@@ -20,6 +20,8 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  folders       Folder[]
+  snippets      Snippet[]
 
   @@unique([email])
   @@map("user")
@@ -68,4 +70,40 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Folder {
+  id   String @id @default(cuid())
+  name String
+
+  parentFolderId String?
+  parent         Folder?  @relation("FolderHeirarchy", fields: [parentFolderId], references: [id], onDelete: Cascade)
+  folders        Folder[] @relation("FolderHeirarchy")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  snippets Snippet[]
+
+  @@map("folder")
+}
+
+model Snippet {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  folderId String?
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("snippet")
 }

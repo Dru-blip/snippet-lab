@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { betterAuth } from 'better-auth';
@@ -18,12 +16,13 @@ import { PrismaClient } from 'generated/prisma/client';
         auth: betterAuth({
           database: prismaAdapter(db, { provider: 'postgresql' }),
           emailAndPassword: { enabled: true },
+          trustedOrigins: ['http://localhost:5173'],
         }),
       }),
       inject: [DB_CONNECTION],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
