@@ -13,6 +13,7 @@ export default function Dashboard() {
   const [picked, setPicked] = useState<string>(folderColors[0]);
   const { mutate, isPending: pending } = useCreateFolder(close);
   const navigate = useNavigate();
+  const [folderName, setFolderName] = useState<string>("");
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -24,7 +25,7 @@ export default function Dashboard() {
   }
 
   function handleCreateFolder() {
-    mutate({ name: "New Folder", color: picked } as Folder);
+    mutate({ name: folderName, color: picked } as Folder);
   }
 
   return (
@@ -63,13 +64,20 @@ export default function Dashboard() {
             ))}
           </Flex>
         </aside>
-        <div>
+        <div style={{ width: "100%", padding: "10px" }}>
           <Outlet />
         </div>
       </div>
       <Modal opened={opened} onClose={close} title="Create New Folder" centered>
         <Stack>
-          <TextInput label="Folder name" placeholder="eg. React,Jsx,Compilers" required />
+          <TextInput
+            label="Folder name"
+            placeholder="eg. React,Jsx,Compilers"
+            required
+            onChange={(e) => {
+              setFolderName(e.target.value);
+            }}
+          />
           <div>
             <p>Folder Color</p>
             <Flex align={"center"} justify={"space-evenly"}>

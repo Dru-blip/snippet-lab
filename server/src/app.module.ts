@@ -7,6 +7,7 @@ import { DB_CONNECTION } from './database/database.connection';
 import { DatabaseModule } from './database/database.module';
 import { PrismaClient } from 'generated/prisma/client';
 import { FoldersModule } from './folders/folders.module';
+import { SnippetsModule } from './snippets/snippets.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { FoldersModule } from './folders/folders.module';
       inject: [DB_CONNECTION],
     }),
     FoldersModule,
+    SnippetsModule,
   ],
   controllers: [],
   providers: [],
