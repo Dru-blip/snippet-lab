@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router";
-import { useAuthSession } from "../hooks";
+import { useAuthSession } from "../lib/hooks";
 
 export default function AuthLayout() {
   const { session, loading } = useAuthSession();
@@ -7,7 +7,7 @@ export default function AuthLayout() {
 
   if (loading) return <div>Loading...</div>;
   if (session) {
-    navigate("/dashboard");
+    navigate("/lab");
   }
   return (
     <main>

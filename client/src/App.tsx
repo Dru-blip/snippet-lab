@@ -7,6 +7,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import RootLayout from "./layouts/RootLayout";
 import Dashboard from "./pages/Dashboard";
+import FolderPage from "./pages/FolderPage";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
         <Route path="register" element={<Register />} />
       </Route>
       <Route element={<RootLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="lab" element={<Dashboard />}>
+          <Route path=":folderId" element={<FolderPage />} />
+        </Route>
       </Route>
     </Routes>
   );

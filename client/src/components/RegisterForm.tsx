@@ -29,7 +29,7 @@ export default function RegisterForm() {
       email,
       password,
       name: username,
-      callbackURL: "/dashboard",
+      callbackURL: "/lab",
     });
 
     //TODO:report error

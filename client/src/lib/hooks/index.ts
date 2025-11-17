@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { authClient } from "../lib/auth-client";
+import { authClient } from "../auth-client";
 import type { Session } from "better-auth";
 
 export function useAuthSession() {

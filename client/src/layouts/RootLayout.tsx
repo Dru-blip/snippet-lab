@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router";
-import { useAuthSession } from "../hooks";
+import { useAuthSession } from "../lib/hooks";
 
 export default function RootLayout() {
   const { session, loading } = useAuthSession();

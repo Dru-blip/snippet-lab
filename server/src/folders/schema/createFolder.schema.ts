@@ -1,4 +1,5 @@
 export class CreateFolderSchema {
   name: string;
-  parentId: string;
+  parentId?: string;
+  color: string;
 }

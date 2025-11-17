@@ -18,7 +18,7 @@ export default function LoginForm() {
     const { data, error } = await authClient.signIn.email({
       email,
       password,
-      callbackURL: "/dashboard",
+      callbackURL: "/lab",
     });
     //TODO:report error
     if (error) {

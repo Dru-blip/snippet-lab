@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FolderService } from './folders.service';
 import { CreateFolderSchema } from './schema/createFolder.schema';
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
@@ -9,8 +9,14 @@ export class FoldersController {
 
   @Get()
   async getAll(@Session() session: UserSession) {
-    const folders = await this.folderService.getAll(session.user.id);
+    const folders = await this.folderService.findAll(session.user.id);
     return { data: folders, err: null };
+  }
+
+  @Get(':id')
+  async getOne(@Param('id') id: string) {
+    const folder = await this.folderService.findOne(id);
+    return { data: folder, err: null };
   }
 
   @Post()

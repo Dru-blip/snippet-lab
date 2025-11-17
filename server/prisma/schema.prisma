@@ -76,6 +76,7 @@ model Folder {
   id   String @id @default(cuid())
   name String
 
+  color          String
   parentFolderId String?
   parent         Folder?  @relation("FolderHeirarchy", fields: [parentFolderId], references: [id], onDelete: Cascade)
   folders        Folder[] @relation("FolderHeirarchy")
