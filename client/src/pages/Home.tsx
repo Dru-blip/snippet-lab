@@ -1,9 +1,9 @@
-import { Button } from "@mantine/core";
-
 export default function Home() {
   return (
     <div>
-      <Button>Click me</Button>
+      <a className="btn btn-primary" href="/lab">
+        Lab
+      </a>
       <h1>Welcome to the Home Page!</h1>
     </div>
   );

@@ -1,4 +1,3 @@
-import { Card, TextInput, PasswordInput, Button, Title, Stack, Anchor } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { authClient } from "../lib/auth-client";
 
@@ -22,42 +21,54 @@ export default function LoginForm() {
     });
     //TODO:report error
     if (error) {
-      // message = error.message!;
+      // message = error.message!;\n
     }
     console.log(data);
   }
 
   return (
-    <Card w={360} shadow="xl" radius="md" p="xl" withBorder style={{ margin: "auto" }}>
-      <Title order={3} ta="center" mb="md">
-        Login
-      </Title>
+    <div className="card shadow-xl bg-base-100 border m-auto w-96 p-8">
+      <h2 className="card-title text-center mb-4">Login</h2>
 
       <form onSubmit={form.onSubmit(async (values) => await login(values))}>
-        <Stack gap="md">
-          <TextInput
-            label="Email"
-            placeholder="you@example.com"
-            {...form.getInputProps("email")}
-            required
-          />
+        <div className="flex flex-col gap-4">
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Email</span>
+            </div>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              className="input input-bordered w-full"
+              {...form.getInputProps("email")}
+              required
+            />
+            {form.errors.email && <div className="label text-error">{form.errors.email}</div>}
+          </label>
 
-          <PasswordInput
-            label="Password"
-            placeholder="Your password"
-            {...form.getInputProps("password")}
-            required
-          />
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Password</span>
+            </div>
+            <input
+              type="password"
+              placeholder="Your password"
+              className="input input-bordered w-full"
+              {...form.getInputProps("password")}
+              required
+            />
+            {form.errors.password && <div className="label text-error">{form.errors.password}</div>}
+          </label>
 
-          <Button type="submit" fullWidth>
+          <button type="submit" className="btn btn-primary w-full">
             Log In
-          </Button>
+          </button>
 
-          <Anchor size="sm" ta="center" href="#" underline="always">
+          <a className="link link-hover text-sm text-center" href="#">
             Forgot password?
-          </Anchor>
-        </Stack>
+          </a>
+        </div>
       </form>
-    </Card>
+    </div>
   );
 }

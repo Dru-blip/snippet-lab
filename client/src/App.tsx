@@ -1,5 +1,4 @@
-import "@mantine/core/styles.css";
-
+import "./App.css";
 import { Routes, Route } from "react-router";
 import Home from "./pages/Home";
 import AuthLayout from "./layouts/AuthLayout";

@@ -1,23 +1,33 @@
-import { useParams } from "react-router";
+import { Outlet, useParams } from "react-router";
 import { useFolder } from "../lib/queries/folder";
-import { Button, Card, Modal, Stack, TextInput } from "@mantine/core";
 import { useCreateSnippet, useSnippets } from "../lib/queries/snippets";
-import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Snippet } from "../types";
 
 export default function FolderPage() {
   const { folderId } = useParams();
   const { data: folder, isLoading, error } = useFolder(folderId as string);
   const { data: snippets } = useSnippets(folderId as string);
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, setOpened] = useState(false);
   const [snippetName, setSnippetName] = useState("");
   const [snippetDescription, setSnippetDescription] = useState("");
   const {
     mutate,
     isError,
     isPending: pending,
-  } = useCreateSnippet(folder?.data?.id as string, close);
+  } = useCreateSnippet(folder?.data?.id as string, () => {
+    setOpened(false);
+  });
+
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (opened) {
+      modalRef.current?.showModal();
+    } else {
+      modalRef.current?.close();
+    }
+  }, [opened]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -37,38 +47,82 @@ export default function FolderPage() {
 
   return (
     <>
-      <div>
-        <Button onClick={open} leftSection={"+"}>
-          New snippet
-        </Button>
-        {snippets?.data.map((snippet) => (
-          <Card key={snippet.id}>
-            <Card.Section>{snippet.name}</Card.Section>
-          </Card>
-        ))}
+      <div className="grid grid-cols-2">
+        <div className="w-1/3">
+          <div className="flex items-center border">
+            <p>{folder?.data.name}</p>
+            <button
+              className="btn btn-circle btn-ghost flex items-center justify-center"
+              onClick={() => setOpened(true)}
+            >
+              +
+            </button>
+            <button className="btn btn-circle btn-ghost flex items-center justify-center">
+              del
+            </button>
+          </div>
+          <div className="grid gap-4 grid-cols-1">
+            {snippets?.data.map((snippet) => (
+              <div key={snippet.id} className="bg-base-100 w-full shadow-md p-2">
+                <h2 className="card-title">{snippet.name}</h2>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <Outlet />
+        </div>
       </div>
-      <Modal opened={opened} onClose={close} centered title="Create new Snippet">
-        <Stack>
-          <TextInput
-            label="Name"
-            placeholder="enter name"
-            required
-            onChange={(e) => {
-              setSnippetName(e.target.value);
+      <dialog ref={modalRef} className="modal" onCancel={() => setOpened(false)}>
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Create new Snippet</h3>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleCreateSnippet();
             }}
-          />
-          <TextInput
-            label="Description"
-            placeholder="enter description"
-            onChange={(e) => {
-              setSnippetDescription(e.target.value);
-            }}
-          />
-          <Button loading={pending} fullWidth onClick={handleCreateSnippet}>
-            Create Snippet
-          </Button>
-        </Stack>
-      </Modal>
+            className="py-4 flex flex-col gap-4"
+          >
+            <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text">Name</span>
+              </div>
+              <input
+                type="text"
+                placeholder="enter name"
+                className="input input-bordered w-full"
+                value={snippetName}
+                onChange={(e) => {
+                  setSnippetName(e.target.value);
+                }}
+                required
+              />
+            </label>
+            <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text">Description</span>
+              </div>
+              <input
+                type="text"
+                placeholder="enter description"
+                className="input input-bordered w-full"
+                value={snippetDescription}
+                onChange={(e) => {
+                  setSnippetDescription(e.target.value);
+                }}
+              />
+            </label>
+            <button type="submit" className="btn btn-primary w-full" disabled={pending}>
+              {pending ? "Creating..." : "Create Snippet"}
+            </button>
+          </form>
+          <div className="modal-action">
+            <button className="btn" onClick={() => setOpened(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 }
